@@ -10,13 +10,30 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
+import { useUser } from "@clerk/clerk-react";
+import GlobalApi from "./../../../service/GlobalApi";
 
 const AddResume = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [resumeTitle, setResumeTitle] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const { user } = useUser();
 
   const onCreate = () => {
     const uuid = uuidv4();
+    const data = {
+      data: {
+        title: resumeTitle,
+        resumeId: uuid,
+        userEmail: user?.primaryEmailAddress?.emailAddress,
+        userName: user?.fullName,
+      },
+    };
+
+    GlobalApi.CreateNewResume(data).then((resp) => {
+      console.log(resp);
+    });
   };
 
   return (
@@ -45,7 +62,9 @@ const AddResume = () => {
               <Button variant="ghost" onClick={() => setOpenDialog(false)}>
                 Cancel
               </Button>
-              <Button>Create</Button>
+              <Button onClick={() => onCreate()} disabled={!resumeTitle}>
+                Create
+              </Button>
             </div>
           </DialogHeader>
         </DialogContent>
