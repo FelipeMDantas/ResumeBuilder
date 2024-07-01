@@ -1,4 +1,4 @@
-import { PlusSquare } from "lucide-react";
+import { Loader2, PlusSquare } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/clerk-react";
 import GlobalApi from "./../../../service/GlobalApi";
+import { useNavigate } from "react-router-dom";
 
 const AddResume = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -20,7 +21,10 @@ const AddResume = () => {
 
   const { user } = useUser();
 
+  const navigation = useNavigate();
+
   const onCreate = () => {
+    setLoading(true);
     const uuid = uuidv4();
     const data = {
       data: {
@@ -31,9 +35,18 @@ const AddResume = () => {
       },
     };
 
-    GlobalApi.CreateNewResume(data).then((resp) => {
-      console.log(resp);
-    });
+    GlobalApi.CreateNewResume(data).then(
+      (resp) => {
+        console.log(resp);
+        if (resp) {
+          setLoading(false);
+          navigation(`/dashboard/resume/${uuid}/edit`);
+        }
+      },
+      (error) => {
+        setLoading(false);
+      }
+    );
   };
 
   return (
@@ -62,8 +75,11 @@ const AddResume = () => {
               <Button variant="ghost" onClick={() => setOpenDialog(false)}>
                 Cancel
               </Button>
-              <Button onClick={() => onCreate()} disabled={!resumeTitle}>
-                Create
+              <Button
+                onClick={() => onCreate()}
+                disabled={!resumeTitle || loading}
+              >
+                {loading ? <Loader2 className="animate-spin" /> : "Create"}
               </Button>
             </div>
           </DialogHeader>
