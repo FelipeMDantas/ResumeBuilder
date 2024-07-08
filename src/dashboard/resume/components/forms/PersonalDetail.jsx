@@ -3,12 +3,20 @@ import { Input } from "@/components/ui/input";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { useContext } from "react";
 
-const PersonalDetail = () => {
+const PersonalDetail = ({ enabledNext }) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
 
-  const handleInputChange = (e) => {};
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
 
-  const onSave = (e) => {};
+    enabledNext(false);
+    setResumeInfo({ ...resumeInfo, [name]: value });
+  };
+
+  const onSave = (e) => {
+    e.preventDefault();
+    enabledNext(true);
+  };
 
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">

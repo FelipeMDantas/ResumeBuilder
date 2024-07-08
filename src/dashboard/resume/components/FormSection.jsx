@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const FormSection = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
+  const [enableNext, setEnableNext] = useState(false);
 
   return (
     <div>
@@ -26,13 +27,16 @@ const FormSection = () => {
             className="flex gap-2"
             size="sm"
             onClick={() => setActiveFormIndex(activeFormIndex + 1)}
+            disabled={!enableNext}
           >
             Next
             <ArrowRight />
           </Button>
         </div>
       </div>
-      {activeFormIndex === 1 ? <PersonalDetail /> : null}
+      {activeFormIndex === 1 ? (
+        <PersonalDetail enableNext={(v) => setEnableNext(v)} />
+      ) : null}
     </div>
   );
 };
