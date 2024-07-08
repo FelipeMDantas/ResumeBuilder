@@ -35,7 +35,7 @@ const FormSection = () => {
         </div>
       </div>
       {activeFormIndex === 1 ? (
-        <PersonalDetail enableNext={(v) => setEnableNext(v)} />
+        <PersonalDetail enabledNext={(v) => setEnableNext(v)} />
       ) : null}
     </div>
   );
