@@ -42,6 +42,9 @@
     },
     "lastName": {
       "type": "string"
+    },
+    "summary": {
+      "type": "text"
     }
   }
 }

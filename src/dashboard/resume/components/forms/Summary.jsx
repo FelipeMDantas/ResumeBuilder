@@ -4,6 +4,7 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GlobalApi from "../../../../../service/GlobalApi";
+import { Brain, LoaderCircle } from "lucide-react";
 
 const Summary = ({ enabledNext }) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
@@ -45,8 +46,10 @@ const Summary = ({ enabledNext }) => {
           <Button
             variant="outline"
             size="sm"
-            className="border-primary text-primary"
+            className="border-primary text-primary flex gap-2"
+            type="button"
           >
+            <Brain className="h-4 w-4" />
             Generate from AI
           </Button>
         </div>
@@ -56,7 +59,9 @@ const Summary = ({ enabledNext }) => {
           required
         />
         <div className="mt-2 flex justify-end">
-          <Button>Save</Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? <LoaderCircle className="animate-spin" /> : "Save"}
+          </Button>
         </div>
       </form>
     </div>
