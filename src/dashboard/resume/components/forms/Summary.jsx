@@ -6,9 +6,9 @@ import { useParams } from "react-router-dom";
 import GlobalApi from "../../../../../service/GlobalApi";
 import { Brain, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
+import { AIChatSession } from "../../../../../service/AIModal";
 
-const prompt =
-  "I am a React developer. Give me a resume summary within 5 lines.";
+const prompt = "I am a {jobTitle}. Give me a resume summary within 5 lines.";
 
 const Summary = ({ enabledNext }) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
@@ -20,6 +20,16 @@ const Summary = ({ enabledNext }) => {
   useEffect(() => {
     summary && setResumeInfo({ ...resumeInfo, summary: summary });
   }, [summary]);
+
+  const GenerateSummaryFromAI = async () => {
+    setLoading(true);
+    const internalPrompt = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
+    console.log(internalPrompt);
+    const result = await AIChatSession.sendMessage(internalPrompt);
+
+    console.log(result.response.text());
+    setLoading(false);
+  };
 
   const onSave = (e) => {
     e.preventDefault();
@@ -52,6 +62,7 @@ const Summary = ({ enabledNext }) => {
             size="sm"
             className="border-primary text-primary flex gap-2"
             type="button"
+            onClick={() => GenerateSummaryFromAI()}
           >
             <Brain className="h-4 w-4" />
             Generate from AI
