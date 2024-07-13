@@ -5,6 +5,10 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GlobalApi from "../../../../../service/GlobalApi";
 import { Brain, LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
+
+const prompt =
+  "I am a React developer. Give me a resume summary within 5 lines.";
 
 const Summary = ({ enabledNext }) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
