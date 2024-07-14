@@ -16,6 +16,7 @@ const Summary = ({ enabledNext }) => {
 
   const [summary, setSummary] = useState();
   const [loading, setLoading] = useState(false);
+  const [aiGeneratedSummaryList, setAiGenerateSummaryList] = useState();
 
   useEffect(() => {
     summary && setResumeInfo({ ...resumeInfo, summary: summary });
@@ -24,10 +25,9 @@ const Summary = ({ enabledNext }) => {
   const GenerateSummaryFromAI = async () => {
     setLoading(true);
     const internalPrompt = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
-    console.log(internalPrompt);
     const result = await AIChatSession.sendMessage(internalPrompt);
 
-    console.log(result.response.text());
+    setAiGenerateSummaryList(JSON.parse([result.response.text()]));
     setLoading(false);
   };
 
@@ -79,6 +79,18 @@ const Summary = ({ enabledNext }) => {
           </Button>
         </div>
       </form>
+
+      {aiGeneratedSummaryList && (
+        <div>
+          <h2 className="font-bold text-lg">Suggestions</h2>
+          {aiGeneratedSummaryList.map((item, index) => (
+            <div>
+              <h2 className="font-bold my-1">Level: {item?.experience}</h2>
+              <p>{item?.summary}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
