@@ -1,5 +1,17 @@
 import { useState } from "react";
-import { Editor, EditorProvider } from "react-simple-wysiwyg";
+import {
+  BtnBold,
+  BtnBulletList,
+  BtnItalic,
+  BtnLink,
+  BtnNumberedList,
+  BtnStrikeThrough,
+  BtnUnderline,
+  Editor,
+  EditorProvider,
+  Separator,
+  Toolbar,
+} from "react-simple-wysiwyg";
 
 const RichTextEditor = () => {
   const [value, setValue] = useState();
@@ -7,10 +19,19 @@ const RichTextEditor = () => {
   return (
     <div>
       <EditorProvider>
-        <Editor
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        ></Editor>
+        <Editor value={value} onChange={(e) => setValue(e.target.value)}>
+          <Toolbar>
+            <BtnBold />
+            <BtnItalic />
+            <BtnUnderline />
+            <BtnStrikeThrough />
+            <Separator />
+            <BtnNumberedList />
+            <BtnBulletList />
+            <Separator />
+            <BtnLink />
+          </Toolbar>
+        </Editor>
       </EditorProvider>
     </div>
   );

@@ -18,6 +18,10 @@ const Experience = () => {
 
   const handleChange = (event, index) => {};
 
+  const addExperience = () => {
+    setExperienceList([...exprienceList, formField]);
+  };
+
   return (
     <div>
       <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
@@ -79,9 +83,22 @@ const Experience = () => {
           ))}
         </div>
         <div className="flex justify-between">
-          <Button variant="outline" className="text-primary">
-            + Add Experience
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="text-primary"
+              onClick={addExperience}
+            >
+              + Add Experience
+            </Button>
+            <Button
+              variant="outline"
+              className="text-primary"
+              onClick={addExperience}
+            >
+              - Remove Experience
+            </Button>
+          </div>
           <Button>Save</Button>
         </div>
       </div>
