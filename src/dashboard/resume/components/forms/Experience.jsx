@@ -16,10 +16,27 @@ const formField = {
 const Experience = () => {
   const [exprienceList, setExperienceList] = useState([formField]);
 
-  const handleChange = (event, index) => {};
+  const handleChange = (event, index) => {
+    const newEntries = exprienceList.slice();
+    const { name, value } = event.target;
+    newEntries[index][name] = value;
+
+    setExperienceList(newEntries);
+  };
 
   const addExperience = () => {
     setExperienceList([...exprienceList, formField]);
+  };
+
+  const removeExperience = () => {
+    setExperienceList((exprienceList) => exprienceList.slice(0, -1));
+  };
+
+  const handleRichTextEditor = (e, name, index) => {
+    const newEntries = exprienceList.slice();
+    newEntries[index][name] = e.target.value;
+
+    setExperienceList(newEntries);
   };
 
   return (
@@ -76,7 +93,11 @@ const Experience = () => {
                   />
                 </div>
                 <div className="col-span-2">
-                  <RichTextEditor />
+                  <RichTextEditor
+                    onRichTextEditorChange={(event) =>
+                      handleRichTextEditor(event, "workSummary", index)
+                    }
+                  />
                 </div>
               </div>
             </div>
@@ -94,7 +115,7 @@ const Experience = () => {
             <Button
               variant="outline"
               className="text-primary"
-              onClick={addExperience}
+              onClick={removeExperience}
             >
               - Remove Experience
             </Button>

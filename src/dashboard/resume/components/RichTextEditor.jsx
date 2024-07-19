@@ -13,13 +13,19 @@ import {
   Toolbar,
 } from "react-simple-wysiwyg";
 
-const RichTextEditor = () => {
+const RichTextEditor = ({ onRichTextEditorChange }) => {
   const [value, setValue] = useState();
 
   return (
     <div>
       <EditorProvider>
-        <Editor value={value} onChange={(e) => setValue(e.target.value)}>
+        <Editor
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+            onRichTextEditorChange(e);
+          }}
+        >
           <Toolbar>
             <BtnBold />
             <BtnItalic />
