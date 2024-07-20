@@ -104,6 +104,7 @@ const Experience = () => {
                     onRichTextEditorChange={(event) =>
                       handleRichTextEditor(event, "workSummary", index)
                     }
+                    index={index}
                   />
                 </div>
               </div>
