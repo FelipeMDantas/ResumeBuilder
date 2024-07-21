@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { Brain } from "lucide-react";
+import { Brain, LoaderCircle } from "lucide-react";
 import { useContext, useState } from "react";
 import {
   BtnBold,
@@ -15,6 +15,7 @@ import {
   Separator,
   Toolbar,
 } from "react-simple-wysiwyg";
+import { AIChatSession } from "../../../../service/AIModal";
 import { toast } from "sonner";
 
 const prompt =
@@ -23,12 +24,15 @@ const prompt =
 
 const RichTextEditor = ({ onRichTextEditorChange, index }) => {
   const [value, setValue] = useState();
+  const [loading, setLoading] = useState(false);
 
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
 
-  const generateSummaryFromAI = () => {
+  const generateSummaryFromAI = async () => {
+    setLoading(true);
     if (!resumeInfo.experience[index].title) {
       toast("Please add a position title.");
+      setLoading(false);
 
       return;
     }
@@ -37,6 +41,10 @@ const RichTextEditor = ({ onRichTextEditorChange, index }) => {
       "{positionTitle}",
       resumeInfo.experience[index].title
     );
+    const result = await AIChatSession.sendMessage(aiPrompt);
+    const resp = result.response.text();
+    setValue(resp.replace("[", "").replace("]", ""));
+    setLoading(false);
   };
 
   return (
@@ -46,10 +54,16 @@ const RichTextEditor = ({ onRichTextEditorChange, index }) => {
         <Button
           variant="outline"
           size="sm"
-          className="border-primary text-primary"
+          className="flex gap-2 border-primary text-primary"
           onClick={generateSummaryFromAI}
         >
-          <Brain /> Generate with AI
+          {loading ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            <>
+              <Brain className="h-4 w-4" /> Generate with AI
+            </>
+          )}
         </Button>
       </div>
       <EditorProvider>
