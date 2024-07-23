@@ -1,6 +1,9 @@
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+import { LoaderCircle } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
 
 const Education = () => {
   const [educationalList, setEducationalList] = useState([
@@ -13,8 +16,41 @@ const Education = () => {
       description: "",
     },
   ]);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (event, index) => {};
+  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+
+  const handleChange = (event, index) => {
+    const newEntries = educationalList.slice();
+    const { name, value } = event.target;
+    newEntries[index][name] = value;
+
+    setEducationalList(newEntries);
+  };
+
+  const onSave = () => {};
+
+  const addEducation = () => {
+    setEducationalList([
+      ...educationalList,
+      {
+        universityName: "",
+        degree: "",
+        major: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+      },
+    ]);
+  };
+
+  const removeEducation = () => {
+    setEducationalList((educationalList) => educationalList.slice(0, -1));
+  };
+
+  useEffect(() => {
+    setResumeInfo({ ...resumeInfo, education: educationalList });
+  }, [educationalList]);
 
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
@@ -25,7 +61,7 @@ const Education = () => {
         {educationalList.map((item, index) => (
           <div key={index}>
             <div>
-              <div>
+              <div className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg">
                 <label>University Name</label>
                 <Input
                   name="universityName"
@@ -69,6 +105,27 @@ const Education = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="flex justify-between">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            className="text-primary"
+            onClick={addEducation}
+          >
+            + Add Education
+          </Button>
+          <Button
+            variant="outline"
+            className="text-primary"
+            onClick={removeEducation}
+          >
+            - Remove Education
+          </Button>
+        </div>
+        <Button disabled={loading} onClick={() => onSave()}>
+          {loading ? <LoaderCircle className="animate-spin" /> : "Save"}
+        </Button>
       </div>
     </div>
   );
