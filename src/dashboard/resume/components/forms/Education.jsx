@@ -4,6 +4,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { LoaderCircle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import GlobalApi from "service/GlobalApi";
+import { toast } from "sonner";
 
 const Education = () => {
   const [educationalList, setEducationalList] = useState([
@@ -20,6 +23,8 @@ const Education = () => {
 
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
 
+  const params = useParams();
+
   const handleChange = (event, index) => {
     const newEntries = educationalList.slice();
     const { name, value } = event.target;
@@ -28,7 +33,22 @@ const Education = () => {
     setEducationalList(newEntries);
   };
 
-  const onSave = () => {};
+  const onSave = () => {
+    setLoading(true);
+    const data = { data: { education: educationalList } };
+
+    GlobalApi.UpdateResumeDetail(params.resumeId, data).then(
+      (resp) => {
+        console.log(resp);
+        setLoading(false);
+        toast("Details updated!");
+      },
+      (error) => {
+        setLoading(false);
+        toast("Server error. Please try again.");
+      }
+    );
+  };
 
   const addEducation = () => {
     setEducationalList([
@@ -60,8 +80,8 @@ const Education = () => {
       <div>
         {educationalList.map((item, index) => (
           <div key={index}>
-            <div>
-              <div className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg">
+            <div className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg">
+              <div className="col-span-2">
                 <label>University Name</label>
                 <Input
                   name="universityName"
@@ -84,14 +104,16 @@ const Education = () => {
                 <Input
                   name="startDate"
                   onChange={(e) => handleChange(e, index)}
+                  type="date"
                 />
               </div>
 
-              <div>
+              <div className="col-span-2">
                 <label>End Date</label>
                 <Input
                   name="endDate"
                   onChange={(e) => handleChange(e, index)}
+                  type="date"
                 />
               </div>
 
