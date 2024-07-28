@@ -19,7 +19,11 @@ const Experience = () => {
   const [exprienceList, setExperienceList] = useState([formField]);
   const [loading, setLoading] = useState(false);
 
-  const [resumeInfo, setResumeInfo] = useContext(ResumeInfoContext);
+  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+
+  useEffect(() => {
+    resumeInfo && setExperienceList(resumeInfo?.Experience);
+  }, [resumeInfo]);
 
   const handleChange = (event, index) => {
     const newEntries = exprienceList.slice();
@@ -64,6 +68,7 @@ const Experience = () => {
                   <Input
                     name="title"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.title}
                   />
                 </div>
                 <div>
@@ -71,6 +76,7 @@ const Experience = () => {
                   <Input
                     name="companyName"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.companyName}
                   />
                 </div>
                 <div>
@@ -78,6 +84,7 @@ const Experience = () => {
                   <Input
                     name="city"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.city}
                   />
                 </div>
                 <div>
@@ -85,6 +92,7 @@ const Experience = () => {
                   <Input
                     name="state"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.state}
                   />
                 </div>
                 <div>
@@ -93,6 +101,7 @@ const Experience = () => {
                     name="startDate"
                     onChange={(event) => handleChange(index, event)}
                     type="date"
+                    defaultValue={item?.startDate}
                   />
                 </div>
                 <div>
@@ -101,6 +110,7 @@ const Experience = () => {
                     name="endDate"
                     onChange={(event) => handleChange(index, event)}
                     type="date"
+                    defaultValue={item?.endDate}
                   />
                 </div>
                 <div className="col-span-2">
@@ -109,6 +119,7 @@ const Experience = () => {
                       handleRichTextEditor(event, "workSummary", index)
                     }
                     index={index}
+                    defaultValue={item?.workSummary}
                   />
                 </div>
               </div>

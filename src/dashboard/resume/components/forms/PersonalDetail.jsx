@@ -33,7 +33,8 @@ const PersonalDetail = ({ enabledNext }) => {
 
     GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
       (resp) => {
-        enabledNext(true), setLoading(false);
+        enabledNext(true);
+        setLoading(false);
       },
       (error) => {
         setLoading(false);

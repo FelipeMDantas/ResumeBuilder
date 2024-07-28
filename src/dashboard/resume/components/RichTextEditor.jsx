@@ -22,8 +22,8 @@ const prompt =
   "Position title: {positionTitle}. Provide me with 5-7 bullet points regarding the experience section in my resume" +
   " (neither add experience levels nor return me a JSON array). Give me a result in HTML tags.";
 
-const RichTextEditor = ({ onRichTextEditorChange, index }) => {
-  const [value, setValue] = useState();
+const RichTextEditor = ({ onRichTextEditorChange, index, defaultValue }) => {
+  const [value, setValue] = useState(defaultValue);
   const [loading, setLoading] = useState(false);
 
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);

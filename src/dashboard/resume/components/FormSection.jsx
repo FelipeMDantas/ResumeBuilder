@@ -9,7 +9,7 @@ import Skills from "./forms/Skills";
 
 const FormSection = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
-  const [enableNext, setEnableNext] = useState(false);
+  const [enableNext, setEnableNext] = useState(true);
 
   return (
     <div>
