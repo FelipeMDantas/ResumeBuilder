@@ -25,6 +25,10 @@ const Education = () => {
 
   const params = useParams();
 
+  useEffect(() => {
+    resumeInfo && setEducationalList(resumeInfo?.education);
+  }, []);
+
   const handleChange = (event, index) => {
     const newEntries = educationalList.slice();
     const { name, value } = event.target;
@@ -35,7 +39,9 @@ const Education = () => {
 
   const onSave = () => {
     setLoading(true);
-    const data = { data: { education: educationalList } };
+    const data = {
+      data: { education: educationalList.map(({ id, ...rest }) => rest) },
+    };
 
     GlobalApi.UpdateResumeDetail(params.resumeId, data).then(
       (resp) => {
@@ -86,17 +92,26 @@ const Education = () => {
                 <Input
                   name="universityName"
                   onChange={(e) => handleChange(e, index)}
+                  defaultValue={item?.universityName}
                 />
               </div>
 
               <div>
                 <label>Degree</label>
-                <Input name="degree" onChange={(e) => handleChange(e, index)} />
+                <Input
+                  name="degree"
+                  onChange={(e) => handleChange(e, index)}
+                  defaultValue={item?.degree}
+                />
               </div>
 
               <div>
                 <label>Major</label>
-                <Input name="major" onChange={(e) => handleChange(e, index)} />
+                <Input
+                  name="major"
+                  onChange={(e) => handleChange(e, index)}
+                  defaultValue={item?.major}
+                />
               </div>
 
               <div>
@@ -105,6 +120,7 @@ const Education = () => {
                   name="startDate"
                   onChange={(e) => handleChange(e, index)}
                   type="date"
+                  defaultValue={item?.startDate}
                 />
               </div>
 
@@ -114,6 +130,7 @@ const Education = () => {
                   name="endDate"
                   onChange={(e) => handleChange(e, index)}
                   type="date"
+                  defaultValue={item?.endDate}
                 />
               </div>
 
@@ -122,6 +139,7 @@ const Education = () => {
                 <Textarea
                   name="description"
                   onChange={(e) => handleChange(e, index)}
+                  defaultValue={item?.description}
                 />
               </div>
             </div>

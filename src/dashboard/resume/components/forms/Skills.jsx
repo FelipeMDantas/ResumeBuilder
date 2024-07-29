@@ -17,6 +17,10 @@ const Skills = () => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const { resumeId } = useParams();
 
+  useEffect(() => {
+    resumeInfo && setSkillsList(resumeInfo?.skills);
+  }, []);
+
   const handleChange = (index, name, value) => {
     const newEntries = skillsList.slice();
     newEntries[index][name] = value;
@@ -41,7 +45,7 @@ const Skills = () => {
     setLoading(true);
 
     const data = {
-      data: { skills: skillsList },
+      data: { skills: skillsList.map(({ id, ...rest }) => rest) },
     };
 
     GlobalApi.UpdateResumeDetail(resumeId, data).then(
@@ -73,6 +77,7 @@ const Skills = () => {
               <Input
                 onChange={(e) => handleChange(index, "name", e.target.value)}
                 className="w-full"
+                defaultValue={item.name}
               />
             </div>
 

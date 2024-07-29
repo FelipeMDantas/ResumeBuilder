@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import RichTextEditor from "../RichTextEditor";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { LoaderCircle } from "lucide-react";
+import GlobalApi from "../../../.././../service/GlobalApi";
+import { toast } from "sonner";
 
 const formField = {
   title: "",
@@ -48,7 +50,24 @@ const Experience = () => {
     setExperienceList(newEntries);
   };
 
-  const onSave = () => {};
+  const onSave = () => {
+    setLoading(true);
+
+    const data = {
+      data: { Experience: exprienceList.map(({ id, ...rest }) => rest) },
+    };
+
+    GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
+      (resp) => {
+        console.log(resp);
+        setLoading(false);
+        toast("Details updated");
+      },
+      (error) => {
+        setLoading(false);
+      }
+    );
+  };
 
   useEffect(() => {
     setResumeInfo({ ...resumeInfo, experience: exprienceList });
@@ -60,7 +79,7 @@ const Experience = () => {
         <div className="font-bold text-lg">Professional Experience</div>
         <p>Add your previous job experience</p>
         <div>
-          {exprienceList.map((item, index) => (
+          {exprienceList?.map((item, index) => (
             <div key={index}>
               <div className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg">
                 <div>
