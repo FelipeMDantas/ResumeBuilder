@@ -5,6 +5,7 @@ import ResumePreview from "@/dashboard/resume/components/ResumePreview";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GlobalApi from "../../../../../service/GlobalApi";
+import { RWebShare } from "react-web-share";
 
 const ViewResume = () => {
   const [resumeInfo, setResumeInfo] = useState();
@@ -39,7 +40,18 @@ const ViewResume = () => {
           </p>
           <div className="flex justify-between px-44 my-10">
             <Button onClick={handleDownload}>Download</Button>
-            <Button>Share</Button>
+            <RWebShare
+              data={{
+                text: "Hello. This is my resume.",
+                url: `${
+                  import.meta.env.VITE_BASE_URL
+                }/my-resume/${resumeId}/view`,
+                title: `${resumeInfo?.firstName} ${resumeInfo?.lastName}`,
+              }}
+              onClick={() => console.log("shared successfully!")}
+            >
+              <Button>Share</Button>
+            </RWebShare>
           </div>
         </div>
       </div>
