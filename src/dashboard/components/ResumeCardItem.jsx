@@ -17,13 +17,20 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
+import GlobalApi from "service/GlobalApi";
+import { toast } from "sonner";
 
 const ResumeCardItem = ({ resume }) => {
   const navigation = useNavigate();
 
   const [openAlert, setOpenAlert] = useState(false);
 
-  const onDelete = () => {}
+  const onDelete = () => {
+    GlobalApi.DeleteResumeById(resume.documentId).then((resp) => {
+      console.log(resp);
+      toast("Resume deleted.");
+    });
+  };
 
   return (
     <>
