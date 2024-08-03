@@ -28,7 +28,11 @@ const Dashboard = () => {
         <AddResume />
         {resumeList.length &&
           resumeList.map((resume, index) => (
-            <ResumeCardItem resume={resume} key={index} />
+            <ResumeCardItem
+              resume={resume}
+              key={index}
+              refreshData={GetResumesList}
+            />
           ))}
       </div>
     </div>

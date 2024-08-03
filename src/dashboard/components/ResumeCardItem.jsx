@@ -1,4 +1,4 @@
-import { MoreVertical } from "lucide-react";
+import { Loader2Icon, MoreVertical } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -17,19 +17,29 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import GlobalApi from "service/GlobalApi";
+import GlobalApi from "../../../service/GlobalApi";
 import { toast } from "sonner";
 
-const ResumeCardItem = ({ resume }) => {
+const ResumeCardItem = ({ resume, refreshData }) => {
   const navigation = useNavigate();
 
   const [openAlert, setOpenAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onDelete = () => {
-    GlobalApi.DeleteResumeById(resume.documentId).then((resp) => {
-      console.log(resp);
-      toast("Resume deleted.");
-    });
+    setLoading(true);
+    GlobalApi.DeleteResumeById(resume.documentId).then(
+      (resp) => {
+        console.log(resp);
+        toast("Resume deleted.");
+        refreshData();
+        setLoading(false);
+        setOpenAlert(false);
+      },
+      (error) => {
+        setLoading(false);
+      }
+    );
   };
 
   return (
@@ -93,7 +103,9 @@ const ResumeCardItem = ({ resume }) => {
               <AlertDialogCancel onClick={() => setOpenAlert(false)}>
                 Cancel
               </AlertDialogCancel>
-              <AlertDialogAction onClick={onDelete}>Continue</AlertDialogAction>
+              <AlertDialogAction onClick={onDelete} disabled={loading}>
+                {loading ? <Loader2Icon className="animate-spin" /> : "Delete"}
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
