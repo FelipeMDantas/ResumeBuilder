@@ -6,7 +6,10 @@ import {
 } from "@/components/ui/popover";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { LayoutGrid } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { useParams } from "react-router-dom";
+import GlobalApi from "../../../../service/GlobalApi";
+import { toast } from "sonner";
 
 const ThemeColor = () => {
   const colors = [
@@ -33,9 +36,20 @@ const ThemeColor = () => {
   ];
 
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+  const { resumeId } = useParams();
+
+  const [selectedColor, setSelectedColor] = useState();
 
   const onColorSelect = (color) => {
+    setSelectedColor(color);
     setResumeInfo({ ...resumeInfo, themeColor: color });
+
+    const data = { data: { themeColor: color } };
+
+    GlobalApi.UpdateResumeDetail(resumeId, data).then((resp) => {
+      console.log(resp);
+      toast("Theme color updated.");
+    });
   };
 
   return (
@@ -52,7 +66,9 @@ const ThemeColor = () => {
       <div className="grid grid-cols-5 gap-3">
         {colors.map((item, index) => (
           <div
-            className="h-5 w-5 rounded-full cursor-pointer hover:border-black border"
+            className={`h-5 w-5 rounded-full cursor-pointer hover:border-black border ${
+              selectedColor?.themeColor === item && "border border-black"
+            }`}
             style={{ background: item }}
             onClick={() => onColorSelect(item)}
           />
